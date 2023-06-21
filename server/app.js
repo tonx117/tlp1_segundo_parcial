@@ -1,10 +1,19 @@
 // Imports
 const cors = require("cors");
 const express = require("express");
-
+const morgan = require("morgan");
 const path = require("path");
-
+require("dotenv").config();
 const app = express();
+
+const { sequelize } = require("./database");
+
+sequelize
+  .authenticate()
+  .then(() => console.log("Conexión a base de datos exitosa"))
+  .catch((error) => console.log("Error al conectar a base de datos", error));
+
+require("ejs");
 
 // Middlewares
 // TODO: Implementar middlewares
@@ -16,7 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
-app.use("/api", require("./routes/reserva.routes"));
+app.use(require("./routes/reserva.routes"));
 
 // TODO: Si la petición no coincide con ninguna de las rutas declaradas, mostrar error 404
 app.use((req, res, next) => {
@@ -35,4 +44,4 @@ app.use((req, res, next) => {
     </h1>`);
 });
 // Starting the server
-app.listen(45635, () => console.log("Server on port 4000"));
+app.listen(4000, () => console.log("Server on port 4000"));
